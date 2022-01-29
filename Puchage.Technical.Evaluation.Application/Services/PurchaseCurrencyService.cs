@@ -23,6 +23,10 @@ namespace Puchage.Technical.Evaluation.Application.Services
         private readonly IPurchaseCurrencyRepository _PurchaseCurrencyRepository;
         private readonly IHttpClient _httpClient;
         private CurrencyExhangeQuoteDTO _currencyExhangeQuoteDTO;
+        decimal LimitMaxUSDMonth = 200;
+        decimal LimitMaxBRLMonth = 300;
+        const string currencyUSD= "USD";
+        const string currencyBRL = "BRL";
         public PurchaseCurrencyService(IConfiguration configuration, IPurchaseCurrencyRepository PurchaseCurrencyRepository,  IHttpClient httpClient)
         {
             _configuration = configuration;
@@ -32,17 +36,44 @@ namespace Puchage.Technical.Evaluation.Application.Services
 
         public async Task<ResulService> ProcessBuyCurrencies(CurrencyRequestDTO currencyRequestDTO)
         {
-          
-         if(Execute( currencyRequestDTO.originCurrency, currencyRequestDTO.CurrencyChange))
-         {
-                if (_currencyExhangeQuoteDTO != null && _currencyExhangeQuoteDTO.pricePurchase!=0)
-                {
-                    currencyRequestDTO.priceDivisa = _currencyExhangeQuoteDTO.pricePurchase;
-                    SaveCurrencyAmount(currencyRequestDTO);
-                }
+            try
+            {
 
-         }
-            return  new ResulService { messaje = "process success", success = true, data = null, codError = "0" };
+
+
+                if (Execute(currencyRequestDTO.originCurrency, currencyRequestDTO.CurrencyChange))
+                {
+                    if (_currencyExhangeQuoteDTO != null && _currencyExhangeQuoteDTO.pricePurchase != 0)
+                    {
+                       
+                        var AmountExhange = (currencyRequestDTO.Amount / _currencyExhangeQuoteDTO.quote);
+                        if (AmountExhange > LimitMaxUSDMonth && currencyRequestDTO.CurrencyChange == currencyUSD) { return new ResulService { messaje = "Estimado Usuario el limite de compra es de " + LimitMaxUSDMonth + " en moneda " + currencyUSD, success = true, data = null, codError = "0" }; }
+                        if (AmountExhange > LimitMaxBRLMonth && currencyRequestDTO.CurrencyChange == currencyBRL) { return new ResulService { messaje = "Estimado Usuario el limite de compra es de " + LimitMaxBRLMonth + " en moneda " + currencyBRL, success = true, data = null, codError = "0" }; }
+                        var resulSave = await SaveCurrencyAmount(currencyRequestDTO);
+
+                        if (resulSave == 0) { return new ResulService { messaje = "Estimado Usuario vuelva intentar dentro unos minutos", success = true, data = null, codError = "0" }; }
+
+
+                        AmountExchange dataSuccess = new()
+                        {
+                             amountExhange=AmountExhange,
+                             desCurrencyExchange="dólar tipo de cambio",
+
+                        };
+
+                    return new ResulService { messaje = "process success", success = true, data = dataSuccess, codError = "0" };
+                }
+                }
+                if(currencyRequestDTO.CurrencyChange !=currencyUSD  && currencyRequestDTO.CurrencyChange != currencyBRL) return new ResulService { messaje = "Estimado usuario actualmente no contamos con el servicio para la moneda de cambio", success = true, codError = "204" };
+                return new ResulService { messaje = "Estimado Usuario vuelva intentar dentro unos minutos", success = true, data = null, codError = "0" };
+           
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
 
@@ -118,11 +149,11 @@ namespace Puchage.Technical.Evaluation.Application.Services
             return true;
         }
 
-        public async void SaveCurrencyAmount(CurrencyRequestDTO currencyRequestDTO)
+        public async Task<decimal> SaveCurrencyAmount(CurrencyRequestDTO currencyRequestDTO)
         {
             CurrencyAmount currencyAmount = new();
             currencyAmount.Amount = currencyRequestDTO.Amount;
-            currencyAmount.priceDivisa = currencyRequestDTO.priceDivisa;
+            currencyAmount.priceDivisa = _currencyExhangeQuoteDTO.pricePurchase;
             currencyAmount.AmountExhange = (currencyRequestDTO.Amount / _currencyExhangeQuoteDTO.quote);
             currencyAmount.originCurrency = currencyRequestDTO.originCurrency;
             currencyAmount.CurrencyChange = currencyRequestDTO.CurrencyChange;
@@ -131,7 +162,10 @@ namespace Puchage.Technical.Evaluation.Application.Services
             currencyAmount.created_at = DateTime.Now.Date;
             currencyAmount.transactionType = "C";
 
-       var result=   await  _PurchaseCurrencyRepository.RegisterCurrencyAmount(currencyAmount);
+            var result=   await  _PurchaseCurrencyRepository.RegisterCurrencyAmount(currencyAmount);
+            if (result) { return currencyAmount.AmountExhange; }
+
+            return 0;
         }
 
     }

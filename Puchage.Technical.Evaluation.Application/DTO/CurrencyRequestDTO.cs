@@ -9,10 +9,10 @@ namespace Puchage.Technical.Evaluation.Application.DTO
     public class CurrencyRequestDTO
     {
         public decimal Amount { get; set; }
-        public decimal priceDivisa { get; set; }
+        //public decimal priceDivisa { get; set; }
         public string originCurrency { get; set; }
         public string CurrencyChange { get; set; }
         public int codUserBuyer { get; set; }
-        public string transactionType { get; set; }
+        //public string transactionType { get; set; }
     }
 }

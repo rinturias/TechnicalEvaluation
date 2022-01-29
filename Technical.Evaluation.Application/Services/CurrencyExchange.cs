@@ -40,7 +40,7 @@ namespace Technical.Evaluation.Application.Services
            
             
             var result = await objFactory.GetExchange();
-            CurrencyVO ResulQuote = await _currencyRepository.GetQuoteAmount(originCurrency.ToUpper());
+            CurrencyVO ResulQuote = await _currencyRepository.GetQuoteAmount(CurrencyChange.ToUpper());
             if (ResulQuote == null) return new ResulService { messaje = "Estimado usuario actualmente no contamos con el servicio, estamos trabajando para ampliar nuestra red de monedas.", success = true, codError = "204" };
 
 

@@ -26,5 +26,5 @@ Quote decimal(15,9),
 Active int 
 );
 go
-insert into Currency (CodCurrency,Description,IsoCurrency,Quote,Active)values(1000,'PESOS ARGENTINOS','ARP',104.79,0);
-insert into Currency (CodCurrency,Description,IsoCurrency,Quote,Active)values(3000,'REAL BRASILEÑO','BRL',5.37,0);
+insert into Currency (CodCurrency,Description,IsoCurrency,Quote,Active)values(1000,'DOLAR ESTADOUNIDENSE','USD',104.79,0);
+insert into Currency (CodCurrency,Description,IsoCurrency,Quote,Active)values(3000,'REAL BRASILEÃ‘O','BRL',5.37,0);
