@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Polly" Version="7.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Puchage.Technical.Evaluation.Domain\Puchage.Technical.Evaluation.Domain.csproj" />
+    <ProjectReference Include="..\Puchage.Technical.Evaluation.Utils\Puchage.Technical.Evaluation.Utils.csproj" />
+    <ProjectReference Include="D:\VIDEOS DE DESARROLLO\microservicios\CLASE_02\Seccion_02\MS.AFORO255\MS.AFORO255.Cross.Proxy\Technical.Evaluation.Cross.Proxy.csproj" />
+  </ItemGroup>
+
+</Project>

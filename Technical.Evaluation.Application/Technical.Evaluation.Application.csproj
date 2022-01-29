@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Technical.Evaluation.Domain\Technical.Evaluation.Domain.csproj" />
+    <ProjectReference Include="..\Technical.Evaluation.infrastructure.Service\Technical.Evaluation.infrastructure.Service.csproj" />
+  </ItemGroup>
+
+</Project>

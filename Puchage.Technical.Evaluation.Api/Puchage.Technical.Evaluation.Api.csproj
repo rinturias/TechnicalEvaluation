@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Puchage.Technical.Evaluation.Application\Puchage.Technical.Evaluation.Application.csproj" />
+    <ProjectReference Include="..\Puchage.Technical.Evaluation.IoC\Puchage.Technical.Evaluation.IoC.csproj" />
+    <ProjectReference Include="D:\VIDEOS DE DESARROLLO\microservicios\CLASE_02\Seccion_02\MS.AFORO255\MS.AFORO255.Cross.RabbitMQ\Technical.Evaluation.Cross.RabbitMQ.csproj" />
+  </ItemGroup>
+
+</Project>
